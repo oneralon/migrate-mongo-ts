@@ -1,6 +1,6 @@
 {
   "name": "migrate-mongo-ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A database migration tool for MongoDB in Node",
   "main": "lib/migrate-mongo.js",
   "bin": {
@@ -11,14 +11,14 @@
     "test-coverage": "nyc --reporter=text-lcov mocha --recursive | coveralls",
     "lint": "eslint lib/ test/"
   },
-  "author": "Sebastian Van Sande",
+  "author": "oneralon",
   "license": "MIT",
   "keywords": [
     "migrate mongo mongodb migrations database"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/seppevs/migrate-mongo.git"
+    "url": "https://github.com/oneralon/migrate-mongo-ts.git"
   },
   "engines": {
     "node": ">=8"
