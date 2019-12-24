@@ -1,6 +1,6 @@
 // In this file you can configure migrate-mongo
 
-const config = {
+export default {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
     url: "mongodb://localhost:27017",
@@ -21,7 +21,4 @@ const config = {
 
   // The mongodb collection where the applied changes are stored. Only edit this when really necessary.
   changelogCollectionName: "changelog"
-};
-
-// Return the config as a promise
-module.exports = config;
+}

@@ -29,7 +29,7 @@ Usage: migrate-mongo-ts [options] [command]
 
 ## Quickstart
 ### Initialize a new project
-Make sure you have [Node.js](https://nodejs.org/en/) 8.0.0 (or higher) installed.  
+Make sure you have [Node.ts](https://nodejs.org/en/) 8.0.0 (or higher) installed.  
 
 Create a directory where you want to store your migrations for your mongo database (eg. 'albums' here) and cd into it
 ````bash
@@ -40,18 +40,18 @@ $ cd albums-migrations
 Initialize a new migrate-mongo-ts project
 ````bash
 $ migrate-mongo-ts init
-Initialization successful. Please edit the generated migrate-mongo-config.js file
+Initialization successful. Please edit the generated migrate-mongo-config.ts file
 ````
 
 The above command did two things:
-1. create a sample 'migrate-mongo-config.js' file and
+1. create a sample 'migrate-mongo-config.ts' file and
 2. create a 'migrations' directory
 
-Edit the migrate-mongo-config.js file. An object or promise can be returned. Make sure you change the mongodb url:
+Edit the migrate-mongo-config.ts file. An object or promise can be returned. Make sure you change the mongodb url:
 ````javascript
 // In this file you can configure migrate-mongo
 
-module.exports = {
+export default {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
     url: "mongodb://localhost:27017",
@@ -71,7 +71,7 @@ module.exports = {
 
   // The mongodb collection where the applied changes are stored. Only edit this when really necessary.
   changelogCollectionName: "changelog"
-};
+}
 ````
 
 ### Creating a new migration script
@@ -168,7 +168,7 @@ $ migrate-mongo-ts status
 
 ### Using a custom config file
 All actions (except ```init```) accept an optional ````-f```` or ````--file```` option to specify a path to a custom config file.
-By default, migrate-mongo-ts will look for a ````migrate-mongo-config.js```` config file in of the current directory.
+By default, migrate-mongo-ts will look for a ````migrate-mongo-config.ts```` config file in of the current directory.
 
 #### Example:
 
@@ -183,15 +183,15 @@ $ migrate-mongo-ts status -f '~/configs/albums-migrations.ts'
 ````
 
 ### Using npm packages in your migration scripts
-You can use use Node.js modules (or require other modules) in your migration scripts.
-It's even possible to use npm modules, just provide a `package.json` file in the root of your migration project:
+You can use use Node.ts modules (or require other modules) in your migration scripts.
+It's even possible to use npm modules, just provide a `package.tson` file in the root of your migration project:
 
 ````bash
 $ cd albums-migrations
 $ npm init --yes
 ````
 
-Now you have a package.json file, and you can install your favorite npm modules that might help you in your migration scripts.
+Now you have a package.tson file, and you can install your favorite npm modules that might help you in your migration scripts.
 For example, one of the very useful [promise-fun](https://github.com/sindresorhus/promise-fun) npm modules.
 
 ### Using MongoDB's Transactions API

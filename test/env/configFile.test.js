@@ -26,7 +26,7 @@ describe("configFile", () => {
     });
 
     it("should yield an error if the config file does not exist", async () => {
-      const configPath = path.join(process.cwd(), "migrate-mongo-config.js");
+      const configPath = path.join(process.cwd(), "migrate-mongo-config.ts");
       fs.stat.returns(Promise.reject(new Error("It does not exist")));
       try {
         await configFile.shouldExist();
@@ -48,7 +48,7 @@ describe("configFile", () => {
     });
 
     it("should yield an error if the config file exists", async () => {
-      const configPath = path.join(process.cwd(), "migrate-mongo-config.js");
+      const configPath = path.join(process.cwd(), "migrate-mongo-config.ts");
       fs.stat.returns(Promise.resolve());
       try {
         await configFile.shouldNotExist();
@@ -64,14 +64,14 @@ describe("configFile", () => {
   describe("getConfigFilename()", () => {
     it("should return the config file name", () => {
       expect(configFile.getConfigFilename()).to.equal(
-        "migrate-mongo-config.js"
+        "migrate-mongo-config.ts"
       );
     });
   });
 
   describe("read()", () => {
     it("should attempt to read the config file", async () => {
-      const configPath = path.join(process.cwd(), "migrate-mongo-config.js");
+      const configPath = path.join(process.cwd(), "migrate-mongo-config.ts");
       try {
         await configFile.read();
         expect.fail("Error was not thrown");
@@ -81,7 +81,7 @@ describe("configFile", () => {
     });
 
     it("should be possible to read a custom, absolute config file path", async () => {
-      global.options = { file: "/some/absoluete/path/to/a-config-file.js" };
+      global.options = { file: "/some/absoluete/path/to/a-config-file.ts" };
       try {
         await configFile.read();
         expect.fail("Error was not thrown");
@@ -93,7 +93,7 @@ describe("configFile", () => {
     });
 
     it("should be possible to read a custom, relative config file path", async () => {
-      global.options = { file: "./a/relative/path/to/a-config-file.js" };
+      global.options = { file: "./a/relative/path/to/a-config-file.ts" };
       const configPath = path.join(process.cwd(), global.options.file);
       try {
         await configFile.read();
