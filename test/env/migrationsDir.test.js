@@ -111,15 +111,15 @@ describe("migrationsDir", () => {
 
   describe("getFileNames()", () => {
     it("should read the directory and yield the result", async () => {
-      fs.readdir.returns(Promise.resolve(["file1.js", "file2.js"]));
+      fs.readdir.returns(Promise.resolve(["file1.ts", "file2.ts"]));
       const files = await migrationsDir.getFileNames();
-      expect(files).to.deep.equal(["file1.js", "file2.js"]);
+      expect(files).to.deep.equal(["file1.ts", "file2.ts"]);
     });
 
-    it("should list only .js files", async () => {
-      fs.readdir.returns(Promise.resolve(["file1.js", "file2.js", ".keep"]));
+    it("should list only .ts files", async () => {
+      fs.readdir.returns(Promise.resolve(["file1.ts", "file2.ts", ".keep"]));
       const files = await migrationsDir.getFileNames();
-      expect(files).to.deep.equal(["file1.js", "file2.js"]);
+      expect(files).to.deep.equal(["file1.ts", "file2.ts"]);
     });
 
     it("should yield errors that occurred while reading the dir", async () => {
@@ -138,10 +138,10 @@ describe("migrationsDir", () => {
       const pathToMigration = path.join(
         process.cwd(),
         "migrations",
-        "someFile.js"
+        "someFile.ts"
       );
       try {
-        await migrationsDir.loadMigration("someFile.js");
+        await migrationsDir.loadMigration("someFile.ts");
         expect.fail("Error was not thrown");
       } catch (err) {
         expect(err.message).to.match(new RegExp(`Cannot find module '${pathToMigration}'`));

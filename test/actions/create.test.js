@@ -77,12 +77,12 @@ describe("create", () => {
     const filename = await create("my_description");
     expect(fs.copy.called).to.equal(true);
     expect(fs.copy.getCall(0).args[0]).to.equal(
-      path.join(__dirname, "../../samples/migration.js")
+      path.join(__dirname, "../../samples/migration.ts")
     );
     expect(fs.copy.getCall(0).args[1]).to.equal(
-      path.join(process.cwd(), "migrations", "20160609080700-my_description.js")
+      path.join(process.cwd(), "migrations", "20160609080700-my_description.ts")
     );
-    expect(filename).to.equal("20160609080700-my_description.js");
+    expect(filename).to.equal("20160609080700-my_description.ts");
     clock.restore();
   });
 
@@ -93,13 +93,13 @@ describe("create", () => {
     await create("this description contains spaces");
     expect(fs.copy.called).to.equal(true);
     expect(fs.copy.getCall(0).args[0]).to.equal(
-      path.join(__dirname, "../../samples/migration.js")
+      path.join(__dirname, "../../samples/migration.ts")
     );
     expect(fs.copy.getCall(0).args[1]).to.equal(
       path.join(
         process.cwd(),
         "migrations",
-        "20160609080700-this_description_contains_spaces.js"
+        "20160609080700-this_description_contains_spaces.ts"
       )
     );
     clock.restore();

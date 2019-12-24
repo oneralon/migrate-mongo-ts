@@ -17,11 +17,11 @@ describe("down", () => {
     return sinon.stub().returns(
       Promise.resolve([
         {
-          fileName: "20160609113224-first_migration.js",
+          fileName: "20160609113224-first_migration.ts",
           appliedAt: new Date()
         },
         {
-          fileName: "20160609113225-last_migration.js",
+          fileName: "20160609113225-last_migration.ts",
           appliedAt: new Date()
         }
       ])
@@ -95,7 +95,7 @@ describe("down", () => {
   it("should yield empty list when nothing to downgrade", async () => {
     status.returns(
       Promise.resolve([
-        { fileName: "20160609113224-some_migration.js", appliedAt: "PENDING" }
+        { fileName: "20160609113224-some_migration.ts", appliedAt: "PENDING" }
       ])
     );
     const migrated = await down(db);
@@ -105,7 +105,7 @@ describe("down", () => {
   it("should load the last applied migration", async () => {
     await down(db);
     expect(migrationsDir.loadMigration.getCall(0).args[0]).to.equal(
-      "20160609113225-last_migration.js"
+      "20160609113225-last_migration.ts"
     );
   });
 
@@ -151,7 +151,7 @@ describe("down", () => {
       expect.fail("Error was not thrown");
     } catch (err) {
       expect(err.message).to.equal(
-        "Could not migrate down 20160609113225-last_migration.js: Invalid syntax"
+        "Could not migrate down 20160609113225-last_migration.ts: Invalid syntax"
       );
     }
   });
@@ -177,6 +177,6 @@ describe("down", () => {
 
   it("should yield a list of downgraded items", async () => {
     const items = await down(db);
-    expect(items).to.deep.equal(["20160609113225-last_migration.js"]);
+    expect(items).to.deep.equal(["20160609113225-last_migration.ts"]);
   });
 });

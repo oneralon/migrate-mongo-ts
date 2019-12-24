@@ -18,9 +18,9 @@ describe("status", () => {
         .stub()
         .returns(
           Promise.resolve([
-            "20160509113224-first_migration.js",
-            "20160512091701-second_migration.js",
-            "20160513155321-third_migration.js"
+            "20160509113224-first_migration.ts",
+            "20160512091701-second_migration.ts",
+            "20160513155321-third_migration.ts"
           ])
         )
     };
@@ -55,11 +55,11 @@ describe("status", () => {
         toArray: sinon.stub().returns(
           Promise.resolve([
             {
-              fileName: "20160509113224-first_migration.js",
+              fileName: "20160509113224-first_migration.ts",
               appliedAt: new Date("2016-06-03T20:10:12.123Z")
             },
             {
-              fileName: "20160512091701-second_migration.js",
+              fileName: "20160512091701-second_migration.ts",
               appliedAt: new Date("2016-06-09T20:10:12.123Z")
             }
           ])
@@ -158,15 +158,15 @@ describe("status", () => {
     expect(statusItems).to.deep.equal([
       {
         appliedAt: "2016-06-03T20:10:12.123Z",
-        fileName: "20160509113224-first_migration.js"
+        fileName: "20160509113224-first_migration.ts"
       },
       {
         appliedAt: "2016-06-09T20:10:12.123Z",
-        fileName: "20160512091701-second_migration.js"
+        fileName: "20160512091701-second_migration.ts"
       },
       {
         appliedAt: "PENDING",
-        fileName: "20160513155321-third_migration.js"
+        fileName: "20160513155321-third_migration.ts"
       }
     ]);
   });

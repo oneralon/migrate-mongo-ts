@@ -19,19 +19,19 @@ describe("up", () => {
     return sinon.stub().returns(
       Promise.resolve([
         {
-          fileName: "20160605123224-first_applied_migration.js",
+          fileName: "20160605123224-first_applied_migration.ts",
           appliedAt: new Date()
         },
         {
-          fileName: "20160606093207-second_applied_migration.js",
+          fileName: "20160606093207-second_applied_migration.ts",
           appliedAt: new Date()
         },
         {
-          fileName: "20160607173840-first_pending_migration.js",
+          fileName: "20160607173840-first_pending_migration.ts",
           appliedAt: "PENDING"
         },
         {
-          fileName: "20160608060209-second_pending_migration.js",
+          fileName: "20160608060209-second_pending_migration.ts",
           appliedAt: "PENDING"
         }
       ])
@@ -51,10 +51,10 @@ describe("up", () => {
     const mock = {};
     mock.loadMigration = sinon.stub();
     mock.loadMigration
-      .withArgs("20160607173840-first_pending_migration.js")
+      .withArgs("20160607173840-first_pending_migration.ts")
       .returns(Promise.resolve(firstPendingMigration));
     mock.loadMigration
-      .withArgs("20160608060209-second_pending_migration.js")
+      .withArgs("20160608060209-second_pending_migration.ts")
       .returns(Promise.resolve(secondPendingMigration));
     return mock;
   }
@@ -116,10 +116,10 @@ describe("up", () => {
     expect(migrationsDir.loadMigration.called).to.equal(true);
     expect(migrationsDir.loadMigration.callCount).to.equal(2);
     expect(migrationsDir.loadMigration.getCall(0).args[0]).to.equal(
-      "20160607173840-first_pending_migration.js"
+      "20160607173840-first_pending_migration.ts"
     );
     expect(migrationsDir.loadMigration.getCall(1).args[0]).to.equal(
-      "20160608060209-second_pending_migration.js"
+      "20160608060209-second_pending_migration.ts"
     );
   });
 
@@ -162,7 +162,7 @@ describe("up", () => {
     expect(changelogCollection.insertOne.callCount).to.equal(2);
     expect(changelogCollection.insertOne.getCall(0).args[0]).to.deep.equal({
       appliedAt: new Date("2016-06-09T08:07:00.077Z"),
-      fileName: "20160607173840-first_pending_migration.js"
+      fileName: "20160607173840-first_pending_migration.ts"
     });
     clock.restore();
   });
@@ -170,8 +170,8 @@ describe("up", () => {
   it("should yield a list of upgraded migration file names", async () => {
     const upgradedFileNames = await up(db);
     expect(upgradedFileNames).to.deep.equal([
-      "20160607173840-first_pending_migration.js",
-      "20160608060209-second_pending_migration.js"
+      "20160607173840-first_pending_migration.ts",
+      "20160608060209-second_pending_migration.ts"
     ]);
   });
 
@@ -183,7 +183,7 @@ describe("up", () => {
       expect.fail("Error was not thrown");
     } catch (err) {
       expect(err.message).to.deep.equal(
-        "Could not migrate up 20160608060209-second_pending_migration.js: Nope"
+        "Could not migrate up 20160608060209-second_pending_migration.ts: Nope"
       );
     }
   });

@@ -1,10 +1,10 @@
 {
-  "name": "migrate-mongo",
-  "version": "7.0.1",
+  "name": "migrate-mongo-ts",
+  "version": "1.0.0",
   "description": "A database migration tool for MongoDB in Node",
   "main": "lib/migrate-mongo.js",
   "bin": {
-    "migrate-mongo": "bin/migrate-mongo.js"
+    "migrate-mongo-ts": "bin/migrate-mongo.js"
   },
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha --recursive",
