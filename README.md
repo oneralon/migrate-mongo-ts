@@ -1,20 +1,16 @@
-# migrate-mongo
-A database migration tool for MongoDB in Node. 
-
-✨ [![Build Status](http://img.shields.io/travis/seppevs/migrate-mongo.svg?style=flat)](https://travis-ci.org/seppevs/migrate-mongo) [![Coverage Status](https://coveralls.io/repos/github/seppevs/migrate-mongo/badge.svg?branch=master)](https://coveralls.io/r/seppevs/migrate-mongo) [![NPM](http://img.shields.io/npm/v/migrate-mongo.svg?style=flat)](https://www.npmjs.org/package/migrate-mongo) [![Downloads](http://img.shields.io/npm/dm/migrate-mongo.svg?style=flat)](https://www.npmjs.org/package/migrate-mongo) [![Dependencies](https://david-dm.org/seppevs/migrate-mongo.svg)](https://david-dm.org/seppevs/migrate-mongo) [![Known Vulnerabilities](https://snyk.io/test/github/seppevs/migrate-mongo/badge.svg)](https://snyk.io/test/github/seppevs/migrate-mongo) ✨
-
-<a href='https://ko-fi.com/D1D5O6O6' target='_blank'><img height='24' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+# migrate-mongo-ts
+A database migration tool for MongoDB in Node, fork from migrate-mongo (https://www.npmjs.com/package/migrate-mongo)
 
 
 ## Installation
 ````bash
-$ npm install -g migrate-mongo
+$ npm install -g migrate-mongo-ts
 ````
 
 ## CLI Usage
 ````
-$ migrate-mongo
-Usage: migrate-mongo [options] [command]
+$ migrate-mongo-ts
+Usage: migrate-mongo-ts [options] [command]
 
 
   Commands:
@@ -41,17 +37,17 @@ $ mkdir albums-migrations
 $ cd albums-migrations
 ````
 
-Initialize a new migrate-mongo project
+Initialize a new migrate-mongo-ts project
 ````bash
-$ migrate-mongo init
+$ migrate-mongo-ts init
 Initialization successful. Please edit the generated migrate-mongo-config.js file
 ````
 
-The above command did two things: 
-1. create a sample 'migrate-mongo-config.js' file and 
+The above command did two things:
+1. create a sample 'migrate-mongo-config.js' file and
 2. create a 'migrations' directory
 
-Edit the migrate-mongo-config.js file. An object or promise can be returned. Make sure you change the mongodb url: 
+Edit the migrate-mongo-config.js file. An object or promise can be returned. Make sure you change the mongodb url:
 ````javascript
 // In this file you can configure migrate-mongo
 
@@ -79,97 +75,49 @@ module.exports = {
 ````
 
 ### Creating a new migration script
-To create a new database migration script, just run the ````migrate-mongo create [description]```` command.
+To create a new database migration script, just run the ````migrate-mongo-ts create [description]```` command.
 
 For example:
 ````bash
-$ migrate-mongo create blacklist_the_beatles
-Created: migrations/20160608155948-blacklist_the_beatles.js
+$ migrate-mongo-ts create blacklist_the_beatles
+Created: migrations/20160608155948-blacklist_the_beatles.ts
 ````
 
 A new migration file is created in the 'migrations' directory:
 ````javascript
-module.exports = {
-  up(db, client) {
-    // TODO write your migration here. Return a Promise (and/or use async & await).
-    // See https://github.com/seppevs/migrate-mongo/#creating-a-new-migration-script
-    // Example:
-    // return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-  },
+import { Db } from 'mongodb';
 
-  down(db, client) {
-    // TODO write the statements to rollback your migration (if possible)
-    // Example:
-    // return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
-  }
-};
+export async function up(db: Db) {
+  // TODO write your migration here.
+  // See https://github.com/seppevs/migrate-mongo/#creating-a-new-migration-script
+  // Example:
+  // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
+}
+
+export async function down(db: Db) {
+  // TODO write the statements to rollback your migration (if possible)
+  // Example:
+  // await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
+}
 ````
 
 Edit this content so it actually performs changes to your database. Don't forget to write the down part as well.
 The ````db```` object contains [the official MongoDB db object](https://www.npmjs.com/package/mongodb)
 The ````client```` object is a [MongoClient](https://mongodb.github.io/node-mongodb-native/3.3/api/MongoClient.html) instance (which you can omit if you don't use it).
 
-There are 3 options to implement the `up` and `down` functions of your migration: 
+There are 3 options to implement the `up` and `down` functions of your migration:
 1. Return a Promises
-2. Use async-await 
-3. Call a callback (DEPRECATED!)
+2. Use async-await
 
 Always make sure the implementation matches the function signature:
 * `function up(db, client) { /* */ }` should return `Promise`
 * `function async up(db, client) { /* */ }` should contain `await` keyword(s) and return `Promise`
-* `function up(db, client, next) { /* */ }` should callback `next`
-
-#### Example 1: Return a Promise
-````javascript
-module.exports = {
-  up(db) {
-    return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-  },
-
-  down(db) {
-    return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
-  }
-};
-````
-
-#### Example 2: Use async & await
-Async & await is especially useful if you want to perform multiple operations against your MongoDB in one migration.
-
-````javascript
-module.exports = {
-  async up(db) {
-    await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-    await db.collection('albums').updateOne({artist: 'The Doors'}, {$set: {stars: 5}});
-  },
-
-  async down(db) {
-    await db.collection('albums').updateOne({artist: 'The Doors'}, {$set: {stars: 0}});
-    await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
-  },
-};
-````
-
-#### Example 3: Call a callback (deprecated)
-Callbacks are supported for backwards compatibility.
-New migration scripts should be written using Promises and/or async & await. It's easier to read and write.
-
-````javascript
-module.exports = {
-  up(db, callback) {
-    return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}}, callback);
-  },
-
-  down(db, callback) {
-    return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}}, callback);
-  }
-};
-````
 
 ### Checking the status of the migrations
 At any time, you can check which migrations are applied (or not)
 
 ````bash
-$ migrate-mongo status
+$ migrate-mongo-ts status
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
@@ -182,7 +130,7 @@ $ migrate-mongo status
 ### Migrate up
 This command will apply all pending migrations
 ````bash
-$ migrate-mongo up
+$ migrate-mongo-ts up
 MIGRATED UP: 20160608155948-blacklist_the_beatles.js
 ````
 
@@ -190,7 +138,7 @@ If an an error occurred, it will stop and won't continue with the rest of the pe
 
 If we check the status again, we can see the last migration was successfully applied:
 ````bash
-$ migrate-mongo status
+$ migrate-mongo-ts status
 ┌─────────────────────────────────────────┬──────────────────────────┐
 │ Filename                                │ Applied At               │
 ├─────────────────────────────────────────┼──────────────────────────┤
@@ -199,16 +147,16 @@ $ migrate-mongo status
 ````
 
 ### Migrate down
-With this command, migrate-mongo will revert (only) the last applied migration
+With this command, migrate-mongo-ts will revert (only) the last applied migration
 
 ````bash
-$ migrate-mongo down
+$ migrate-mongo-ts down
 MIGRATED DOWN: 20160608155948-blacklist_the_beatles.js
 ````
 
 If we check the status again, we see that the reverted migration is pending again:
 ````bash
-$ migrate-mongo status
+$ migrate-mongo-ts status
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
@@ -220,16 +168,16 @@ $ migrate-mongo status
 
 ### Using a custom config file
 All actions (except ```init```) accept an optional ````-f```` or ````--file```` option to specify a path to a custom config file.
-By default, migrate-mongo will look for a ````migrate-mongo-config.js```` config file in of the current directory.
+By default, migrate-mongo-ts will look for a ````migrate-mongo-config.js```` config file in of the current directory.
 
 #### Example:
 
 ````bash
-$ migrate-mongo status -f '~/configs/albums-migrations.js'
+$ migrate-mongo-ts status -f '~/configs/albums-migrations.js'
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
-│ 20160608155948-blacklist_the_beatles.js │ PENDING    │
+│ 20160608155948-blacklist_the_beatles.ts │ PENDING    │
 └─────────────────────────────────────────┴────────────┘
 
 ````
@@ -250,131 +198,8 @@ For example, one of the very useful [promise-fun](https://github.com/sindresorhu
 You can make use of the [MongoDB Transaction API](https://docs.mongodb.com/manual/core/transactions/) in your migration scripts.
 
 Note: this requires both:
-- MongoDB 4.0 or higher 
-- migrate-mongo 7.0.0 or higher
+- MongoDB 4.0 or higher
+- migrate-mongo-ts 7.0.0 or higher
 
-migrate-mongo will call your migration `up` and `down` function with a second argument: `client`.
+migrate-mongo-ts will call your migration `up` and `down` function with a second argument: `client`.
 This `client` argument is an [MongoClient](https://mongodb.github.io/node-mongodb-native/3.3/api/MongoClient.html) instance, it gives you access to the `startSession` function.
-
-Example:
-
-````javascript
-module.exports = {
-  async up(db, client) {
-    const session = client.startSession();
-    try {
-        await session.withTransaction(async () => {
-            await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-            await db.collection('albums').updateOne({artist: 'The Doors'}, {$set: {stars: 5}});
-        });
-    } finally {
-      await session.endSession();
-    }
-  },
-
-  async down(db, client) {
-    const session = client.startSession();
-    try {
-        await session.withTransaction(async () => {
-            await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
-            await db.collection('albums').updateOne({artist: 'The Doors'}, {$set: {stars: 0}});
-        });
-    } finally {
-      await session.endSession();
-    }
-  },
-};
-````
-
-## API Usage
-
-```javascript
-const {
-  init,
-  create,
-  database,
-  config,
-  up,
-  down,
-  status
-} = require('migrate-mongo');
-```
-
-### `init() → Promise`
-
-Initialize a new migrate-mongo project
-```javascript
-await init();
-```
-
-The above command did two things: 
-1. create a sample `migrate-mongo-config.js` file and 
-2. create a `migrations` directory
-
-Edit the `migrate-mongo-config.js` file. Make sure you change the mongodb url.
-
-### `create(description) → Promise<fileName>`
-
-For example:
-```javascript
-const fileName = await create('blacklist_the_beatles');
-console.log('Created:', fileName);
-```
-
-A new migration file is created in the `migrations` directory.
-
-### `database.connect() → Promise<MongoDb>`
-
-Connect to a mongo database using the connection settings from the `migrate-mongo-config.js` file.
-
-```javascript
-const db = await database.connect();
-```
-
-### `config.read() → Promise<JSON>`
-
-Read connection settings from the `migrate-mongo-config.js` file.
-
-```javascript
-const mongoConnectionSettings = await config.read();
-```
-
-### `up(MongoDb) → Promise<Array<fileName>>`
-
-Apply all pending migrations
-
-```javascript
-const db = await database.connect();
-const migrated = await up(db);
-migrated.forEach(fileName => console.log('Migrated:', fileName));
-```
-
-If an an error occurred, the promise will reject and won't continue with the rest of the pending migrations.
-
-### `down(MongoDb) → Promise<Array<fileName>>`
-
-Revert (only) the last applied migration
-
-```javascript
-const db = await database.connect();
-const migratedDown = await down(db);
-migratedDown.forEach(fileName => console.log('Migrated Down:', fileName));
-```
-
-### `status(MongoDb) → Promise<Array<{ fileName, appliedAt }>>`
-
-Check which migrations are applied (or not.
-
-```javascript
-const db = await database.connect();
-const migrationStatus = await status(db);
-migrationStatus.forEach(({ fileName, appliedAt }) => console.log(fileName, ':', appliedAt));
-```
-
-### `db.close() → Promise`
-Close the database connection
-
-```javascript
-const db = await database.connect();
-await db.close()
-```
