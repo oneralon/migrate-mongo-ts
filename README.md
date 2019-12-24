@@ -121,7 +121,7 @@ $ migrate-mongo-ts status
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
-│ 20160608155948-blacklist_the_beatles.js │ PENDING    │
+│ 20160608155948-blacklist_the_beatles.ts │ PENDING    │
 └─────────────────────────────────────────┴────────────┘
 
 ````
@@ -131,7 +131,7 @@ $ migrate-mongo-ts status
 This command will apply all pending migrations
 ````bash
 $ migrate-mongo-ts up
-MIGRATED UP: 20160608155948-blacklist_the_beatles.js
+MIGRATED UP: 20160608155948-blacklist_the_beatles.ts
 ````
 
 If an an error occurred, it will stop and won't continue with the rest of the pending migrations
@@ -142,7 +142,7 @@ $ migrate-mongo-ts status
 ┌─────────────────────────────────────────┬──────────────────────────┐
 │ Filename                                │ Applied At               │
 ├─────────────────────────────────────────┼──────────────────────────┤
-│ 20160608155948-blacklist_the_beatles.js │ 2016-06-08T20:13:30.415Z │
+│ 20160608155948-blacklist_the_beatles.ts │ 2016-06-08T20:13:30.415Z │
 └─────────────────────────────────────────┴──────────────────────────┘
 ````
 
@@ -151,7 +151,7 @@ With this command, migrate-mongo-ts will revert (only) the last applied migratio
 
 ````bash
 $ migrate-mongo-ts down
-MIGRATED DOWN: 20160608155948-blacklist_the_beatles.js
+MIGRATED DOWN: 20160608155948-blacklist_the_beatles.ts
 ````
 
 If we check the status again, we see that the reverted migration is pending again:
@@ -160,7 +160,7 @@ $ migrate-mongo-ts status
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
-│ 20160608155948-blacklist_the_beatles.js │ PENDING    │
+│ 20160608155948-blacklist_the_beatles.ts │ PENDING    │
 └─────────────────────────────────────────┴────────────┘
 ````
 
@@ -173,7 +173,7 @@ By default, migrate-mongo-ts will look for a ````migrate-mongo-config.js```` con
 #### Example:
 
 ````bash
-$ migrate-mongo-ts status -f '~/configs/albums-migrations.js'
+$ migrate-mongo-ts status -f '~/configs/albums-migrations.ts'
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
